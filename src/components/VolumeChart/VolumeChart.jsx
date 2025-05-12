@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrderBook } from "../../redux/orderBook/operations";
 import {
   LineChart,
   Line,
@@ -6,25 +9,65 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
-import { useSelector } from "react-redux";
 
 const VolumeChart = () => {
+  const dispatch = useDispatch();
   const history = useSelector((state) => state.orderBook.history);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(fetchOrderBook("ATOMUSDT"));
+    }, 10000); // кожні 10 секунд
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
+  // Обчислюємо загальний обʼєм бідів та асків на кожному записі
+  const chartData = history.map((entry) => {
+    const bidVolume = entry.bids.reduce(
+      (sum, [_, amount]) => sum + parseFloat(amount),
+      0
+    );
+    const askVolume = entry.asks.reduce(
+      (sum, [_, amount]) => sum + parseFloat(amount),
+      0
+    );
+    const time = new Date(entry.timestamp).toLocaleTimeString();
+    return { time, bidVolume, askVolume };
+  });
+
   return (
-    <LineChart width={700} height={300} data={history}>
-      <CartesianGrid stroke="#ccc" />
-      <XAxis
-        dataKey="timestamp"
-        tickFormatter={(ts) => new Date(ts).toLocaleTimeString()}
-      />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="totalBids" stroke="#4caf50" name="Bids" />
-      <Line type="monotone" dataKey="totalAsks" stroke="#f44336" name="Asks" />
-    </LineChart>
+    <div style={{ width: "100%", height: 400 }}>
+      <h2 className="text-xl font-bold mb-2">
+        Обʼєм покупок і продажів за 15 хвилин
+      </h2>
+      <ResponsiveContainer>
+        <LineChart
+          data={chartData}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="time" minTickGap={20} />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="bidVolume"
+            stroke="#82ca9d"
+            name="Покупки"
+          />
+          <Line
+            type="monotone"
+            dataKey="askVolume"
+            stroke="#ff6b6b"
+            name="Продажі"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

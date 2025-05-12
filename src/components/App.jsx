@@ -19,7 +19,7 @@ const App = () => {
   return (
     <>
       <h2>Биржевой стакан</h2>
-      <TradeVolumeTracker />
+      {/*<TradeVolumeTracker />*/}
       <VolumeChart />
       <OrderBook />
     </>

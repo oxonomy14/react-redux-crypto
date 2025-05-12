@@ -4,10 +4,12 @@ import { fetchOrderBook } from "./operations";
 const initialState = {
   bids: [],
   asks: [],
-  history: [], // ⬅️ додаємо масив історії
   loading: false,
   error: null,
+  history: [], // додаємо масив історії
 };
+
+const FIFTEEN_MINUTES = 15 * 60 * 1000;
 
 const slice = createSlice({
   name: "orderBook",
@@ -23,25 +25,17 @@ const slice = createSlice({
         state.bids = action.payload.bids;
         state.asks = action.payload.asks;
 
-        // Обрахунок загального обсягу заявок
-        const totalBids = action.payload.bids
-          .slice(0, 20)
-          .reduce((sum, [price, qty]) => sum + parseFloat(qty), 0);
-        const totalAsks = action.payload.asks
-          .slice(0, 20)
-          .reduce((sum, [price, qty]) => sum + parseFloat(qty), 0);
-
+        const timestamp = Date.now();
         const newEntry = {
-          timestamp: Date.now(),
-          totalBids,
-          totalAsks,
+          bids: action.payload.bids,
+          asks: action.payload.asks,
+          timestamp,
         };
 
-        // Оновлюємо історію (максимум 20 записів)
-        state.history.push(newEntry);
-        if (state.history.length > 20) {
-          state.history.shift();
-        }
+        // фільтруємо старіші за 15 хв
+        state.history = [...state.history, newEntry].filter(
+          (entry) => timestamp - entry.timestamp <= FIFTEEN_MINUTES
+        );
       })
       .addCase(fetchOrderBook.rejected, (state, action) => {
         state.loading = false;

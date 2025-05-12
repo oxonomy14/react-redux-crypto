@@ -6,7 +6,7 @@ export const fetchOrderBook = createAsyncThunk(
   async (symbol = "ATOMUSDT", thunkAPI) => {
     try {
       const response = await axios.get(
-        `https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=400`
+        `https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=10`
       );
       return response.data;
     } catch (error) {

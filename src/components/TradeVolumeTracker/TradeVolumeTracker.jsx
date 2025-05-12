@@ -7,7 +7,7 @@ const TradeVolumeTracker = () => {
 
   useEffect(() => {
     const socket = new WebSocket(
-      "wss://stream.binance.com:9443/ws/btcusdt@trade"
+      "wss://stream.binance.com:9443/ws/atomusdt@trade"
     );
 
     socket.onmessage = (event) => {
@@ -50,7 +50,7 @@ const TradeVolumeTracker = () => {
 
   return (
     <div>
-      <h2>BTC/USDT (last 60s)</h2>
+      <h2>ATOM/USDT (last 60s)</h2>
       <p>🟢 Buy Volume: {buyVolume.toFixed(2)} USDT</p>
       <p>🔴 Sell Volume: {sellVolume.toFixed(2)} USDT</p>
       <p>📈 Trend: {buyVolume > sellVolume ? "Pump" : "Dump"}</p>
