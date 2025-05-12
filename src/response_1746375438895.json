@@ -1,0 +1,16 @@
+{
+  "user": {
+    "name": "Markus Rashford",
+    "email": "mr25@mail.com"
+    Rashford&1234
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE3OTMwZWM0OTVlZDZlMjVmNDE3MjAiLCJpYXQiOjE3NDYzNzU0Mzh9.qr9s1oHqmWbhvr_abF6lhVcQR2x4yGzTDuq0f5rbvzc"
+}
+
+payload: {
+    user: {
+      name: 'oxonomy14',
+      email: 'oxonomy14@gmail.com'
+    },
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE4ZWI3ZWM0OTVlZDZlMjVmNDE3ZTgiLCJpYXQiOjE3NDY0NjM2MTR9.UljyQjqrwUpdQ9CrFCZoqeQtkHiSXeKAYBhHApGfIN0'
+  },
